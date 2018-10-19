@@ -1,0 +1,7 @@
+FROM centos
+LABEL maintainer="Yauheni Papkou"
+RUN rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm && \
+yum -y install epel-release && yum -y install nginx
+EXPOSE 80
+ENTRYPOINT ["nginx"]
+CMD ["-g", "daemon off;"]
