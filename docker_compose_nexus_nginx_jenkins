@@ -1,0 +1,52 @@
+version: "2.3"
+services:
+  nexus:
+    image: sonatype/nexus3
+    volumes:
+      - "nexus-data:/sonatype-work"
+    ports:
+      - "8081:8081"
+    logging:
+      driver: journald
+    networks:
+      net_2.0:
+        ipv4_address: 123.45.0.2
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    volumes:
+      - "nginx-data:/etc/nginx"
+    ports:
+      - "80:80"
+    logging:
+      driver: journald
+    networks:
+      net_2.0:
+        ipv4_address: 123.45.0.3
+
+  jenkins:
+    image: jenkins
+    ports:
+      - 8080:8080
+    container_name: jenkins
+    volumes:
+      - "jenkins-data:/var/jenkins_home"
+    logging:
+      driver: journald
+    networks:
+      net_2.0:
+        ipv4_address: 123.45.0.4
+
+volumes:
+  nexus-data: {}
+  nginx-data: {}
+  jenkins-data: {}
+
+networks:
+  net_2.0:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 123.45.0.0/17
